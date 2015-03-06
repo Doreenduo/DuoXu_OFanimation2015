@@ -22,4 +22,11 @@ public:
     
     vector <Mover> moverList;
     
+    Mover mover;
+    Mover follower;
+    
+    
+    ofVec2f repulsion;
+    ofVec2f attraction;
+
 };

@@ -1,16 +1,12 @@
-//
-//  Mover.cpp
-//  w04_h02_We_re_very_competitive_and_we_all_hate_each_other
-//
-//  Created by XuDuo on 15/3/2.
-//
-//
 
 
 #include "Mover.h"
 
 void Mover::setup(float x, float y, float _mass) {
     pos.set(x, y);
+    
+    circleColor.set(ofRandom(255), ofRandom(255), ofRandom(255));
+    
     mass = _mass;
 }
 
@@ -19,8 +15,8 @@ void Mover::resetForces() {
 }
 
 void Mover::applyForce(ofVec2f force) {
-   
-    acc += force/mass;
+
+    acc += force / mass;
 }
 
 void Mover::applyDampingForce(float damping) {
@@ -28,8 +24,14 @@ void Mover::applyDampingForce(float damping) {
 }
 
 void Mover::update() {
+    
     vel += acc;
     pos += vel;
+    
+    float sinOfTime = sin(ofGetElapsedTimef());
+    size = ofMap(sinOfTime, -1, 1, 6, 50);
+    alpha = ofMap(sinOfTime, -1, 1, 250, 40);
+    
 }
 
 void Mover::checkEdges() {
@@ -55,5 +57,6 @@ void Mover::checkEdges() {
 }
 
 void Mover::draw() {
-    ofCircle(pos, 10 * mass);
+    ofCircle(pos, size);
+    ofSetColor(circleColor,alpha);
 }

@@ -5,13 +5,13 @@ void ofApp::setup(){
     
     ofBackground(0);
     
-    for (int y = 0; y < ofGetWidth(); y+=20) {
-        for (int x = 0; x < ofGetWidth(); x+=20) {
+    
+        for (int i = 0; i < 50; i++) {
             Mover mover;
-            mover.setup(x, y, 0.5);
+            mover.setup(ofGetWidth()/2 + ofRandom(-100,100), ofGetHeight()/2+ ofRandom(-100,100),1.0);
             moverList.push_back(mover);
         }
-    }
+    
     
 }
 
@@ -20,25 +20,27 @@ void ofApp::update(){
     
     ofVec2f mousePos = ofVec2f(ofGetMouseX(), ofGetMouseY());
     
-    for (int i = 0; i < moverList.size(); i++) {
+    for (int i = 0; i < 50; i++) {
         
-        ofVec2f repulsion;
         ofVec2f attraction;
-        
         ofVec2f diff = mousePos - moverList[i].pos;
+        attraction.set(diff.getNormalized() * 0.2);
+        repulsion.set(attraction* -1);
         
-        float dist = diff.length();
         
-        if (dist < 100) {
-            repulsion.set(diff.getNormalized()* -0.1);
-        } else if (dist < 200){
-            attraction.set(diff.getNormalized()* 0.1);
-        }
+        if (diff.length() < ofGetMouseX()) {
+           
+            moverList[i].applyForce(repulsion);
+
+        } else {
+            moverList[i].applyForce(attraction);
+           // attraction.set(0);
+            attraction.set(diff*0.001);
+                    }
         
         moverList[i].resetForces();
-        moverList[i].applyForce(repulsion);
         moverList[i].applyForce(attraction);
-        moverList[i].applyDampingForce(0.02);
+        moverList[i].applyDampingForce(0.09);
         moverList[i].checkEdges();
         moverList[i].update();
         
@@ -48,7 +50,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    for (int i = 0; i < moverList.size(); i++) {
+    
+    for (int i = 0; i < 50; i++) {
         moverList[i].draw();
     }
 }
